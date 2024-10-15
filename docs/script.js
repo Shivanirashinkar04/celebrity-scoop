@@ -5,9 +5,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const fetchNews = (category = 'general', query = '') => {
         newsContainer.innerHTML = '<p>Loading news...</p>';
-        const apiKey = '871b28d063f882c3e0cc3e15904caa92';
-        let url = `https://gnews.io/api/v4/top-headlines?token=${apiKey}&topic=${category}`;
-        if (query) url += `&q=${query}`;
+        const apiKey = 'C3_7qDNkI9dvZ9gDxjZNsrODmrMvcKc0SaZj5F8p6lwWBnYm'; // Currents API key
+        let url = `https://api.currentsapi.services/v1/latest-news?apiKey=${apiKey}`;
+        if (category === 'bollywood') {
+            url = `https://api.currentsapi.services/v1/search?apiKey=${apiKey}&keywords=bollywood`;
+        } else if (query) {
+            url += `&keywords=${query}`;
+        }
 
         fetch(url, { method: 'GET', mode: 'cors' })
             .then(response => {
@@ -18,10 +22,10 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .then(data => {
                 newsContainer.innerHTML = '';
-                if (!data.articles) {
+                if (!data.news) {
                     throw new Error('Invalid data format');
                 }
-                data.articles.forEach(article => {
+                data.news.forEach(article => {
                     const newsItem = document.createElement('div');
                     newsItem.className = 'news-item';
                     newsItem.innerHTML = `
@@ -48,7 +52,11 @@ document.addEventListener('DOMContentLoaded', () => {
     categoryButtons.forEach(button => {
         button.addEventListener('click', () => {
             const category = button.getAttribute('data-category');
-            fetchNews(category);
+            if (category === 'bollywood') {
+                fetchNews('bollywood');
+            } else {
+                fetchNews(category);
+            }
         });
     });
 });
