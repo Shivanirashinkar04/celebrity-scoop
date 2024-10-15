@@ -3,10 +3,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('search');
     const categoryButtons = document.querySelectorAll('.category-btn');
 
-    const fetchNews = (endpoint = 'news', query = '') => {
+    const fetchNews = (category = 'entertainment', query = '') => {
         newsContainer.innerHTML = '<p>Loading news...</p>';
+        const apiKey = 'b44a016286aa44d7b80af9e10902ec01';
+        const url = `https://newsapi.org/v2/top-headlines?category=${category}&q=${query}&apiKey=${apiKey}`;
 
-        fetch(`/${endpoint}?search=${query}`)
+        fetch(url)
             .then(response => response.json())
             .then(data => {
                 newsContainer.innerHTML = '';
@@ -31,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchNews();
 
     searchInput.addEventListener('input', () => {
-        fetchNews('news', searchInput.value);
+        fetchNews('entertainment', searchInput.value);
     });
 
     categoryButtons.forEach(button => {
