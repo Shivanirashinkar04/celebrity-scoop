@@ -3,10 +3,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('search');
     const categoryButtons = document.querySelectorAll('.category-btn');
 
-    const fetchNews = (category = 'entertainment', query = '') => {
+    const fetchNews = (category = 'general', query = '') => {
         newsContainer.innerHTML = '<p>Loading news...</p>';
-        const apiKey = 'b44a016286aa44d7b80af9e10902ec01';
-        let url = `https://newsapi.org/v2/top-headlines?apiKey=${apiKey}&category=${category}`;
+        const apiKey = '871b28d063f882c3e0cc3e15904caa92';
+        let url = `https://gnews.io/api/v4/top-headlines?token=${apiKey}&topic=${category}`;
         if (query) url += `&q=${query}`;
 
         fetch(url, { method: 'GET', mode: 'cors' })
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     newsItem.innerHTML = `
                         <h3>${article.title}</h3>
                         <p>${article.description}</p>
-                        <img src="${article.urlToImage || ''}" alt="${article.title || 'Image'}">
+                        <img src="${article.image}" alt="${article.title}">
                         <a href="${article.url}" target="_blank">Read more</a>
                     `;
                     newsContainer.appendChild(newsItem);
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchNews();
 
     searchInput.addEventListener('input', () => {
-        fetchNews('entertainment', searchInput.value);
+        fetchNews('general', searchInput.value);
     });
 
     categoryButtons.forEach(button => {
