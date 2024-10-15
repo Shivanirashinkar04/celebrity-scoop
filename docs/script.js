@@ -6,19 +6,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const fetchNews = (category = 'entertainment', query = '') => {
         newsContainer.innerHTML = '<p>Loading news...</p>';
         const apiKey = 'b44a016286aa44d7b80af9e10902ec01';
-        const url = `https://newsapi.org/v2/top-headlines?category=${category}&q=${query}&apiKey=${apiKey}`;
+        let url = `https://newsapi.org/v2/top-headlines?apiKey=${apiKey}&category=${category}`;
+        if (query) url += `&q=${query}`;
 
         fetch(url)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
             .then(data => {
                 newsContainer.innerHTML = '';
+                if (!data.articles) {
+                    throw new Error('Invalid data format');
+                }
                 data.articles.forEach(article => {
                     const newsItem = document.createElement('div');
                     newsItem.className = 'news-item';
                     newsItem.innerHTML = `
                         <h3>${article.title}</h3>
                         <p>${article.description}</p>
-                        <img src="${article.urlToImage}" alt="${article.title}">
+                        <img src="${article.urlToImage || ''}" alt="${article.title || 'Image'}">
                         <a href="${article.url}" target="_blank">Read more</a>
                     `;
                     newsContainer.appendChild(newsItem);
