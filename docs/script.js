@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let url = `https://newsapi.org/v2/top-headlines?apiKey=${apiKey}&category=${category}`;
         if (query) url += `&q=${query}`;
 
-        fetch(url)
+        fetch(url, { method: 'GET', mode: 'cors' })
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
