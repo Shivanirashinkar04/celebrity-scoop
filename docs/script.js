@@ -7,10 +7,13 @@ document.addEventListener('DOMContentLoaded', () => {
         newsContainer.innerHTML = '<p>Loading news...</p>';
         const apiKey = 'C3_7qDNkI9dvZ9gDxjZNsrODmrMvcKc0SaZj5F8p6lwWBnYm'; // Currents API key
         let url = `https://api.currentsapi.services/v1/latest-news?apiKey=${apiKey}`;
+        
         if (category === 'bollywood') {
             url = `https://api.currentsapi.services/v1/search?apiKey=${apiKey}&keywords=bollywood`;
         } else if (query) {
             url += `&keywords=${query}`;
+        } else {
+            url += `&category=${category}`;
         }
 
         fetch(url, { method: 'GET', mode: 'cors' })
