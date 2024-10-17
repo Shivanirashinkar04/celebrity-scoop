@@ -41,10 +41,10 @@ header input[type="text"] {
 /* Hamburger button */
 .hamburger {
     background-color: transparent;
-    color: white;
+    color: rgb(218, 52, 52);
     font-size: 1.5em;
     border: none;
-    display: none; /* Default hidden, visible on small screens */
+    display: block; /* Default hidden, visible on small screens */
     cursor: pointer;
 }
 
