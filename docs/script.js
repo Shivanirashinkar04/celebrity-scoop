@@ -2,7 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const newsContainer = document.getElementById('news-container');
     const searchInput = document.getElementById('search');
     const categoryButtons = document.querySelectorAll('.category-btn');
-    const sidebar = document.querySelector('.sidebar'); // Sidebar element for mobile collapse
+    const sidebar = document.querySelector('.sidebar'); // Sidebar element for collapse
+    const toggleSidebarButton = document.getElementById('toggle-sidebar'); // Hamburger button
     const currentsApiKey = 'C3_7qDNkI9dvZ9gDxjZNsrODmrMvcKc0SaZj5F8p6lwWBnYm'; // Currents API key
     const worldNewsApiKey = '8430dc4c4ec24558a7fd47e5e3905f3a'; // World News API key
 
@@ -62,6 +63,11 @@ document.addEventListener('DOMContentLoaded', () => {
         fetchNews('general', searchInput.value, currentsApiKey);
     });
 
+    // Toggle sidebar visibility when the hamburger button is clicked
+    toggleSidebarButton.addEventListener('click', () => {
+        sidebar.classList.toggle('hide');
+    });
+
     // Category buttons click event
     categoryButtons.forEach(button => {
         button.addEventListener('click', () => {
@@ -79,10 +85,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Handle resizing of the window to ensure the sidebar appears correctly
+    // Handle resizing of the window to ensure the sidebar behaves correctly
     window.addEventListener('resize', () => {
         if (window.innerWidth > 600) {
-            sidebar.classList.remove('hide');
+            sidebar.classList.remove('hide'); // Always show the sidebar on larger screens
         }
     });
 });

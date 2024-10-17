@@ -1,37 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Celebrity Scoop</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body>
-    <header>
-        <nav>
-            <h1><i class="fas fa-newspaper"></i> Celebrity Scoop</h1>
-            <input type="text" id="search" placeholder="Search news...">
-        </nav>
-    </header>
-    <div class="container">
-        <aside class="sidebar">
-            <ul>
-                <li class="category-btn" data-category="general"><i class="fas fa-globe"></i> General</li>
-                <li class="category-btn" data-category="entertainment"><i class="fas fa-film"></i> Entertainment</li>
-                <li class="category-btn" data-category="bollywood"><i class="fas fa-star"></i> Bollywood</li>
-                <li class="category-btn" data-category="technology"><i class="fas fa-laptop-code"></i> Technology</li>
-                <li class="category-btn" data-category="india-news"><i class="fas fa-flag"></i> India News</li>
-                <li class="category-btn" data-category="world-news"><i class="fas fa-globe-americas"></i> World News</li>
-            </ul>
-        </aside>
-        <main class="main-content">
-            <div id="news-container"></div>
-        </main>
-    </div>
-    <footer>
-        &copy; 2024 Celebrity Scoop. All rights reserved.
-    </footer>
-    <script src="script.js"></script>
-</body>
-</html>
+<div class="header">
+    <button id="toggle-sidebar" class="hamburger">
+        &#9776; <!-- Hamburger menu icon -->
+    </button>
+    <h1>Your News Website</h1>
+</div>
+<div class="sidebar hide">
+    <!-- Sidebar content -->
+    <button class="category-btn" data-category="general">General</button>
+    <button class="category-btn" data-category="bollywood">Bollywood</button>
+    <button class="category-btn" data-category="india-news">India News</button>
+    <button class="category-btn" data-category="world-news">World News</button>
+</div>
+<div id="news-container">
+    <!-- News content will be dynamically loaded here -->
+</div>
