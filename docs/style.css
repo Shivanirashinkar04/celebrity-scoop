@@ -50,6 +50,7 @@ header nav input#search {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     position: fixed;
     height: 100%;
+    transition: transform 0.3s ease;
 }
 
 .sidebar ul {
@@ -125,8 +126,13 @@ footer {
         height: auto;
         position: relative;
         margin-bottom: 20px;
+        transform: translateY(0); /* Show sidebar by default */
     }
     
+    .sidebar.hide {
+        transform: translateY(-100%); /* Hide sidebar when a tab is clicked */
+    }
+
     .main-content {
         margin-left: 0;
     }

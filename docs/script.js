@@ -2,9 +2,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const newsContainer = document.getElementById('news-container');
     const searchInput = document.getElementById('search');
     const categoryButtons = document.querySelectorAll('.category-btn');
+    const sidebar = document.querySelector('.sidebar'); // Sidebar element for mobile collapse
     const currentsApiKey = 'C3_7qDNkI9dvZ9gDxjZNsrODmrMvcKc0SaZj5F8p6lwWBnYm'; // Currents API key
     const worldNewsApiKey = '8430dc4c4ec24558a7fd47e5e3905f3a'; // World News API key
 
+    // Function to fetch and display news
     const fetchNews = (category = 'general', query = '', apiKey = currentsApiKey, isWorldNews = false) => {
         newsContainer.innerHTML = '<p>Loading news...</p>';
         let url = `https://api.currentsapi.services/v1/latest-news?apiKey=${apiKey}`;
@@ -52,11 +54,15 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     };
 
+    // Load general news on page load
     fetchNews('general', '', currentsApiKey);
+
+    // Search functionality
     searchInput.addEventListener('input', () => {
         fetchNews('general', searchInput.value, currentsApiKey);
     });
 
+    // Category buttons click event
     categoryButtons.forEach(button => {
         button.addEventListener('click', () => {
             const category = button.getAttribute('data-category');
@@ -65,6 +71,18 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 fetchNews(category, '', currentsApiKey);
             }
+
+            // On smaller screens, hide the sidebar after selecting a category
+            if (window.innerWidth <= 600) {
+                sidebar.classList.add('hide');
+            }
         });
+    });
+
+    // Handle resizing of the window to ensure the sidebar appears correctly
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 600) {
+            sidebar.classList.remove('hide');
+        }
     });
 });
