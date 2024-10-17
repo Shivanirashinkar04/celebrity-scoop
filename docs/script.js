@@ -17,7 +17,49 @@ document.addEventListener('DOMContentLoaded', () => {
         if (query) {
             url = `${CURRENT_API_BASE_URL}search?apiKey=${apiKey}&keywords=${query}`;
         } else if (category === 'bollywood') {
-            url = `${CURRENT_API_BASE_URL}search?apiKey=${apiKey}&keywords=Bollywood`;
+            const url1 = `${CURRENT_API_BASE_URL}search?apiKey=${apiKey}&keywords=Bollywood`;
+            const url2 = `${WORLD_NEWS_API_BASE_URL}search-news?api-key=${worldNewsApiKey}&text=Bollywood`;
+            try {
+                const [response1, response2] = await Promise.all([
+                    fetch(url1, { method: 'GET', mode: 'cors' }),
+                    fetch(url2, { method: 'GET', mode: 'cors' })
+                ]);
+
+                if (!response1.ok) {
+                    throw new Error(`Currents API error: ${response1.status}`);
+                }
+                if (!response2.ok) {
+                    throw new Error(`World News API error: ${response2.status}`);
+                }
+
+                const data1 = await response1.json();
+                const data2 = await response2.json();
+
+                newsContainer.innerHTML = '';
+                const articles1 = data1.news || data1.articles;
+                const articles2 = data2.news || data2.articles;
+                const allArticles = [...(articles1 || []), ...(articles2 || [])];
+
+                if (!allArticles.length) {
+                    throw new Error('Invalid data format');
+                }
+
+                allArticles.forEach(article => {
+                    const newsItem = document.createElement('div');
+                    newsItem.className = 'news-item';
+                    newsItem.innerHTML = `
+                        <h3>${article.title}</h3>
+                        <p>${article.description}</p>
+                        <img src="${article.image || article.urlToImage}" alt="${article.title}">
+                        <a href="${article.url}" target="_blank">Read more</a>
+                    `;
+                    newsContainer.appendChild(newsItem);
+                });
+            } catch (error) {
+                newsContainer.innerHTML = `<p>Error loading news: ${error.message}</p>`;
+                console.error('Error fetching news:', error);
+            }
+            return;
         } else if (category === 'india-news') {
             url = `${WORLD_NEWS_API_BASE_URL}search-news?api-key=${worldNewsApiKey}&text=India&source-countries=IN`;
         } else if (category === 'world-news') {
