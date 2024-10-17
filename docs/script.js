@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const CURRENT_API_BASE_URL = 'https://api.currentsapi.services/v1/';
     const WORLD_NEWS_API_BASE_URL = 'https://api.worldnewsapi.com/';
 
-    const fetchNews = async (category = 'general', query = '', apiKey = currentsApiKey, isWorldNews = false) => {
+    const fetchNews = async (category = 'general', query = '', apiKey = currentsApiKey) => {
         newsContainer.innerHTML = '<p>Loading news...</p>';
         let url;
         if (query) {
