@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const fetchNews = async (category = 'general', query = '', apiKey = currentsApiKey, isWorldNews = false) => {
         newsContainer.innerHTML = '<p>Loading news...</p>';
         let url;
-
         if (query) {
             url = `${CURRENT_API_BASE_URL}search?apiKey=${apiKey}&keywords=${query}`;
         } else if (category === 'india-news') {
@@ -27,21 +26,17 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             url = `${CURRENT_API_BASE_URL}latest-news?apiKey=${apiKey}&category=${category}`;
         }
-
         try {
             const response = await fetch(url, { method: 'GET', mode: 'cors' });
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-
             const data = await response.json();
             newsContainer.innerHTML = '';
-
             const articles = data.news || data.articles;
             if (!articles) {
                 throw new Error('Invalid data format');
             }
-
             articles.forEach(article => {
                 const newsItem = document.createElement('div');
                 newsItem.className = 'news-item';
@@ -77,7 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
         button.addEventListener('click', () => {
             const category = button.getAttribute('data-category');
             fetchNews(category);
-
             // Hide the sidebar after selecting a category on smaller screens
             if (window.innerWidth <= 600) {
                 sidebar.classList.remove('show');
