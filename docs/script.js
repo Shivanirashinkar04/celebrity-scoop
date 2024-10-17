@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
             url = `https://api.worldnewsapi.com/search-news?api-key=${worldNewsApiKey}&text=India&source-countries=IN`;
         } else if (category === 'world-news') {
             url = `https://api.worldnewsapi.com/search-news?api-key=${worldNewsApiKey}&language=en`;
-        } else if (!isWorldNews) {
+        } else {
             url += `&category=${category}`;
         }
 
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Toggle sidebar visibility when the hamburger button is clicked
     toggleSidebarButton.addEventListener('click', () => {
-        sidebar.classList.toggle('hide');
+        sidebar.classList.toggle('show');
     });
 
     // Category buttons click event
@@ -78,9 +78,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 fetchNews(category, '', currentsApiKey);
             }
 
-            // On smaller screens, hide the sidebar after selecting a category
+            // Hide the sidebar after selecting a category on smaller screens
             if (window.innerWidth <= 600) {
-                sidebar.classList.add('hide');
+                sidebar.classList.remove('show');
             }
         });
     });
@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle resizing of the window to ensure the sidebar behaves correctly
     window.addEventListener('resize', () => {
         if (window.innerWidth > 600) {
-            sidebar.classList.remove('hide'); // Always show the sidebar on larger screens
+            sidebar.classList.remove('show'); // Always show the sidebar on larger screens
         }
     });
 });
