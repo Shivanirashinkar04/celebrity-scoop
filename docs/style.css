@@ -52,7 +52,8 @@ header input[type="text"] {
     top: 0;
     left: 0;
     padding-top: 60px;
-    display: block; /* Show sidebar by default */
+    display: block;
+    z-index: 1000;
 }
 
 .sidebar ul {
