@@ -4,63 +4,67 @@ document.addEventListener('DOMContentLoaded', () => {
     const categoryButtons = document.querySelectorAll('.category-btn');
     const sidebar = document.querySelector('.sidebar'); // Sidebar element for collapse
     const toggleSidebarButton = document.getElementById('toggle-sidebar'); // Hamburger button
+
+    // API Keys
     const currentsApiKey = 'C3_7qDNkI9dvZ9gDxjZNsrODmrMvcKc0SaZj5F8p6lwWBnYm'; // Currents API key
     const worldNewsApiKey = '8430dc4c4ec24558a7fd47e5e3905f3a'; // World News API key
 
+    // API Endpoints
+    const CURRENT_API_BASE_URL = 'https://api.currentsapi.services/v1/';
+    const WORLD_NEWS_API_BASE_URL = 'https://api.worldnewsapi.com/';
+
     // Function to fetch and display news
-    const fetchNews = (category = 'general', query = '', apiKey = currentsApiKey, isWorldNews = false) => {
+    const fetchNews = async (category = 'general', query = '', apiKey = currentsApiKey, isWorldNews = false) => {
         newsContainer.innerHTML = '<p>Loading news...</p>';
-        let url = `https://api.currentsapi.services/v1/latest-news?apiKey=${apiKey}`;
-        
+        let url;
+
         if (query) {
-            url = `https://api.currentsapi.services/v1/search?apiKey=${apiKey}&keywords=${query}`;
-        } else if (category === 'bollywood') {
-            url = `https://api.currentsapi.services/v1/search?apiKey=${apiKey}&keywords=bollywood`;
+            url = `${CURRENT_API_BASE_URL}search?apiKey=${apiKey}&keywords=${query}`;
         } else if (category === 'india-news') {
-            url = `https://api.worldnewsapi.com/search-news?api-key=${worldNewsApiKey}&text=India&source-countries=IN`;
+            url = `${WORLD_NEWS_API_BASE_URL}search-news?api-key=${worldNewsApiKey}&text=India&source-countries=IN`;
         } else if (category === 'world-news') {
-            url = `https://api.worldnewsapi.com/search-news?api-key=${worldNewsApiKey}&language=en`;
+            url = `${WORLD_NEWS_API_BASE_URL}search-news?api-key=${worldNewsApiKey}&language=en`;
         } else {
-            url += `&category=${category}`;
+            url = `${CURRENT_API_BASE_URL}latest-news?apiKey=${apiKey}&category=${category}`;
         }
 
-        fetch(url, { method: 'GET', mode: 'cors' })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                newsContainer.innerHTML = '';
-                if (!data.news && !data.articles) {
-                    throw new Error('Invalid data format');
-                }
-                const articles = data.news || data.articles;
-                articles.forEach(article => {
-                    const newsItem = document.createElement('div');
-                    newsItem.className = 'news-item';
-                    newsItem.innerHTML = `
-                        <h3>${article.title}</h3>
-                        <p>${article.description}</p>
-                        <img src="${article.image || article.urlToImage}" alt="${article.title}">
-                        <a href="${article.url}" target="_blank">Read more</a>
-                    `;
-                    newsContainer.appendChild(newsItem);
-                });
-            })
-            .catch(error => {
-                newsContainer.innerHTML = '<p>Error loading news</p>';
-                console.error('Error fetching news:', error);
+        try {
+            const response = await fetch(url, { method: 'GET', mode: 'cors' });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            newsContainer.innerHTML = '';
+
+            const articles = data.news || data.articles;
+            if (!articles) {
+                throw new Error('Invalid data format');
+            }
+
+            articles.forEach(article => {
+                const newsItem = document.createElement('div');
+                newsItem.className = 'news-item';
+                newsItem.innerHTML = `
+                    <h3>${article.title}</h3>
+                    <p>${article.description}</p>
+                    <img src="${article.image || article.urlToImage}" alt="${article.title}">
+                    <a href="${article.url}" target="_blank">Read more</a>
+                `;
+                newsContainer.appendChild(newsItem);
             });
+        } catch (error) {
+            newsContainer.innerHTML = `<p>Error loading news: ${error.message}</p>`;
+            console.error('Error fetching news:', error);
+        }
     };
 
     // Load general news on page load
-    fetchNews('general', '', currentsApiKey);
+    fetchNews();
 
     // Search functionality
     searchInput.addEventListener('input', () => {
-        fetchNews('general', searchInput.value, currentsApiKey);
+        fetchNews('general', searchInput.value);
     });
 
     // Toggle sidebar visibility when the hamburger button is clicked
@@ -72,11 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
     categoryButtons.forEach(button => {
         button.addEventListener('click', () => {
             const category = button.getAttribute('data-category');
-            if (category === 'world-news' || category === 'india-news') {
-                fetchNews(category, '', worldNewsApiKey, true);
-            } else {
-                fetchNews(category, '', currentsApiKey);
-            }
+            fetchNews(category);
 
             // Hide the sidebar after selecting a category on smaller screens
             if (window.innerWidth <= 600) {
