@@ -2,18 +2,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const newsContainer = document.getElementById('news-container');
     const searchInput = document.getElementById('search');
     const categoryButtons = document.querySelectorAll('.category-btn');
-    const sidebar = document.querySelector('.sidebar'); // Sidebar element for collapse
-    const toggleSidebarButton = document.getElementById('toggle-sidebar'); // Hamburger button
+    const sidebar = document.querySelector('.sidebar');
+    const toggleSidebarButton = document.getElementById('toggle-sidebar');
 
-    // API Keys
-    const currentsApiKey = 'C3_7qDNkI9dvZ9gDxjZNsrODmrMvcKc0SaZj5F8p6lwWBnYm'; // Currents API key
-    const worldNewsApiKey = '8430dc4c4ec24558a7fd47e5e3905f3a'; // World News API key
+    const currentsApiKey = 'C3_7qDNkI9dvZ9gDxjZNsrODmrMvcKc0SaZj5F8p6lwWBnYm';
+    const worldNewsApiKey = '8430dc4c4ec24558a7fd47e5e3905f3a';
 
-    // API Endpoints
     const CURRENT_API_BASE_URL = 'https://api.currentsapi.services/v1/';
     const WORLD_NEWS_API_BASE_URL = 'https://api.worldnewsapi.com/';
 
-    // Function to fetch and display news
     const fetchNews = async (category = 'general', query = '', apiKey = currentsApiKey, isWorldNews = false) => {
         newsContainer.innerHTML = '<p>Loading news...</p>';
         let url;
