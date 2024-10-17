@@ -13,7 +13,7 @@ body {
 
 /* Header styling */
 header {
-    background-color: rgba(34, 34, 34, 0.8); /* Changed to a slightly transparent dark gray */
+    background-color: rgba(34, 34, 34, 0.8); /* Slightly transparent dark gray */
     color: #fff;
     padding: 10px 20px;
     display: flex;
@@ -49,6 +49,9 @@ header input {
     padding-top: 60px; /* Space for header */
     transition: transform 0.3s ease-in-out;
     transform: translateX(-250px); /* Hidden by default */
+    position: fixed; /* Fixed position to remain in view */
+    height: 100%; /* Full height */
+    overflow-y: auto; /* Enable scrolling */
 }
 
 .sidebar.show {
@@ -76,6 +79,7 @@ header input {
 .main-content {
     flex-grow: 1;
     padding: 20px;
+    margin-left: 250px; /* Ensure content does not overlap with the sidebar */
 }
 
 .news-item {
@@ -117,6 +121,8 @@ footer {
 @media (max-width: 768px) {
     .sidebar {
         transform: translateX(-250px); /* Hidden by default */
+        position: relative; /* Change to relative on small screens */
+        height: auto; /* Auto height on small screens */
     }
 
     .sidebar.show {
@@ -129,5 +135,6 @@ footer {
 
     .main-content {
         padding: 10px;
+        margin-left: 0; /* Reset margin for small screens */
     }
 }
