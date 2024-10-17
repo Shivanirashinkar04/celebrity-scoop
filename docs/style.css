@@ -22,6 +22,18 @@ header nav {
     background-size: 400% 400%;
 }
 
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
 header nav h1 {
     margin: 0;
 }
@@ -34,28 +46,6 @@ header nav input#search {
     border: none;
     border-radius: 5px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.tabs {
-    display: flex;
-    justify-content: center;
-    list-style: none;
-    padding: 0;
-    margin: 20px 0;
-}
-
-.tab-link {
-    padding: 10px 20px;
-    background-color: #1DB954;
-    color: white;
-    margin: 0 10px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.tab-link:hover,
-.tab-link.current {
-    background-color: #1ED760;
 }
 
 .container {
@@ -95,7 +85,7 @@ header nav input#search {
     padding: 20px;
 }
 
-#news-container-india, #news-container-world {
+#news-container {
     width: 100%;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -118,20 +108,32 @@ header nav input#search {
 .news-item img {
     width: 100%;
     border-radius: 10px;
+    height: auto;
+    max-height: 200px;
+    object-fit: cover;
 }
 
-.footer {
+footer {
     width: 100%;
     padding: 10px;
     text-align: center;
     background-color: #ff6b6b;
     color: white;
+    position: relative;
+    bottom: 0;
 }
 
-.tab-content {
-    display: none;
-}
-
-.tab-content.current {
-    display: block;
+@media (max-width: 600px) {
+    #news-container {
+        grid-template-columns: 1fr;
+    }
+    .news-item h3 {
+        font-size: 1.2em;
+    }
+    .news-item p {
+        font-size: 0.9em;
+    }
+    .news-item a {
+        padding: 8px 12px;
+    }
 }

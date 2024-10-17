@@ -4,23 +4,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const categoryButtons = document.querySelectorAll('.category-btn');
     const currentsApiKey = 'C3_7qDNkI9dvZ9gDxjZNsrODmrMvcKc0SaZj5F8p6lwWBnYm';
     const worldNewsApiKey = '8430dc4c4ec24558a7fd47e5e3905f3a';
-
-    const fetchNews = (category = 'general', query = '', apiKey = currentsApiKey) => {
+    const fetchNews = (category = 'general', query = '', apiKey = currentsApiKey, isWorldNews = false) => {
         newsContainer.innerHTML = '<p>Loading news...</p>';
         let url = `https://api.currentsapi.services/v1/latest-news?apiKey=${apiKey}`;
-
         if (query) {
             url = `https://api.currentsapi.services/v1/search?apiKey=${apiKey}&keywords=${query}`;
         } else if (category === 'bollywood') {
             url = `https://api.currentsapi.services/v1/search?apiKey=${apiKey}&keywords=bollywood`;
         } else if (category === 'india-news') {
-            url = `https://api.worldnewsapi.com/search-news?apiKey=${worldNewsApiKey}&country=IN`;
+            url = `https://api.worldnewsapi.com/search-news?api-key=${worldNewsApiKey}&country=IN`;
         } else if (category === 'world-news') {
-            url = `https://api.worldnewsapi.com/search-news?apiKey=${worldNewsApiKey}`;
-        } else {
+            url = `https://api.worldnewsapi.com/search-news?api-key=${worldNewsApiKey}&language=en`;
+        } else if (!isWorldNews) {
             url += `&category=${category}`;
         }
-
         fetch(url, { method: 'GET', mode: 'cors' })
             .then(response => {
                 if (!response.ok) {
@@ -56,12 +53,11 @@ document.addEventListener('DOMContentLoaded', () => {
     searchInput.addEventListener('input', () => {
         fetchNews('general', searchInput.value, currentsApiKey);
     });
-
     categoryButtons.forEach(button => {
         button.addEventListener('click', () => {
             const category = button.getAttribute('data-category');
             if (category === 'india-news' || category === 'world-news') {
-                fetchNews(category, '', worldNewsApiKey);
+                fetchNews(category, '', worldNewsApiKey, true);
             } else {
                 fetchNews(category, '', currentsApiKey);
             }
