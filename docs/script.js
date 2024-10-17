@@ -25,6 +25,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         try {
             const response = await fetch(url, { method: 'GET', mode: 'cors' });
+            if (response.status === 429) {
+                throw new Error('Too many requests. Please try again later.');
+            }
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }

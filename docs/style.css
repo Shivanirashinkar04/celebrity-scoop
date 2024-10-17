@@ -12,6 +12,10 @@ header {
     color: white;
     padding: 10px 0;
     text-align: center;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
 }
 
 header h1 {
@@ -53,7 +57,7 @@ header input[type="text"] {
     left: 0;
     padding-top: 60px;
     display: block;
-    z-index: 1000;
+    z-index: 1001;
 }
 
 .sidebar ul {
@@ -74,7 +78,7 @@ header input[type="text"] {
 /* Main Content */
 .container {
     margin-left: 200px;
-    padding: 20px;
+    padding: 80px 20px 20px; /* Account for fixed header */
 }
 
 .main-content {
@@ -116,6 +120,7 @@ footer {
 @media (max-width: 600px) {
     .container {
         margin-left: 0;
+        padding: 80px 10px 10px; /* Adjust for smaller padding on smaller screens */
     }
 
     .main-content {
@@ -126,12 +131,12 @@ footer {
         display: block;
     }
 
-    .sidebar.show {
-        display: block;
-    }
-
     .sidebar {
         display: none;
+    }
+
+    .sidebar.show {
+        display: block;
     }
 
     #news-container {
