@@ -41,10 +41,9 @@ header input[type="text"] {
 /* Hamburger button */
 .hamburger {
     background-color: transparent;
-    color: rgb(218, 52, 52);
+    color: white;
     font-size: 1.5em;
     border: none;
-    display: block; /* Default hidden, visible on small screens */
     cursor: pointer;
 }
 
@@ -58,7 +57,7 @@ header input[type="text"] {
     top: 0;
     left: 0;
     padding-top: 60px;
-    display: block;
+    display: none; /* Hide sidebar by default */
     z-index: 1001;
     overflow-y: auto; /* Allow scrolling */
 }
@@ -79,14 +78,19 @@ header input[type="text"] {
     background-color: #575757;
 }
 
+/* Show sidebar when toggled */
+.sidebar.show {
+    display: block;
+}
+
 /* Main Content */
 .container {
-    margin-left: 200px;
+    margin-left: 0;
     padding: 80px 20px 20px; /* Account for fixed header */
 }
 
 .main-content {
-    margin-left: 220px; /* Adjust based on sidebar width */
+    padding-top: 20px; /* Add some padding at the top */
 }
 
 #news-container {
@@ -127,17 +131,12 @@ footer {
         padding: 80px 10px 10px; /* Adjust for smaller padding on smaller screens */
     }
 
-    .main-content {
-        margin-left: 0;
-    }
-
     .hamburger {
         display: block;
     }
 
     .sidebar {
         display: none;
-        position: fixed;
     }
 
     .sidebar.show {

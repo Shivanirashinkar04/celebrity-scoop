@@ -16,6 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
         let url;
         if (query) {
             url = `${CURRENT_API_BASE_URL}search?apiKey=${apiKey}&keywords=${query}`;
+        } else if (category === 'bollywood') {
+            url = `${CURRENT_API_BASE_URL}latest-news?apiKey=${apiKey}&category=entertainment&keywords=Bollywood`;
         } else if (category === 'india-news') {
             url = `${WORLD_NEWS_API_BASE_URL}search-news?api-key=${worldNewsApiKey}&text=India&source-countries=IN`;
         } else if (category === 'world-news') {
