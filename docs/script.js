@@ -7,86 +7,132 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const currentsApiKey = 'C3_7qDNkI9dvZ9gDxjZNsrODmrMvcKc0SaZj5F8p6lwWBnYm';
     const worldNewsApiKey = '8430dc4c4ec24558a7fd47e5e3905f3a';
+    const newsDataApiKey = 'pub_56596048a2a00b03066fc7c3e6e8e92f41911';
 
     const CURRENT_API_BASE_URL = 'https://api.currentsapi.services/v1/';
     const WORLD_NEWS_API_BASE_URL = 'https://api.worldnewsapi.com/';
+    const NEWSDATA_API_BASE_URL = 'https://newsdata.io/api/1/news?apikey=';
 
-    const fetchNews = async (category = 'general', query = '', apiKey = currentsApiKey) => {
+    const fetchNews = async (category = 'general', query = '') => {
         newsContainer.innerHTML = '<p>Loading news...</p>';
-        let url;
+        let urls = [];
+
         if (query) {
-            url = `${CURRENT_API_BASE_URL}search?apiKey=${apiKey}&keywords=${query}`;
-        } else if (category === 'entertainment-india') {
-            const url1 = `${CURRENT_API_BASE_URL}search?apiKey=${apiKey}&keywords=Bollywood`;
-            const url2 = `${WORLD_NEWS_API_BASE_URL}search-news?api-key=${worldNewsApiKey}&text=Bollywood`;
-            try {
-                const [response1, response2] = await Promise.all([
-                    fetch(url1, { method: 'GET', mode: 'cors' }),
-                    fetch(url2, { method: 'GET', mode: 'cors' })
-                ]);
-                if (!response1.ok) {
-                    throw new Error(`Currents API error: ${response1.status}`);
-                }
-                if (!response2.ok) {
-                    throw new Error(`World News API error: ${response2.status}`);
-                }
-                const data1 = await response1.json();
-                const data2 = await response2.json();
-                newsContainer.innerHTML = '';
-                const articles1 = data1.news || data1.articles;
-                const articles2 = data2.news || data2.articles;
-                const allArticles = [...(articles1 || []), ...(articles2 || [])];
-                if (!allArticles.length) {
-                    throw new Error('Invalid data format');
-                }
-                allArticles.forEach(article => {
-                    const newsItem = document.createElement('div');
-                    newsItem.className = 'news-item';
-                    newsItem.innerHTML = `
-                        <h3>${article.title}</h3>
-                        <p>${article.description}</p>
-                        <p>Author: ${article.author || 'Unknown'}</p> <!-- Added Author -->
-                        <img src="${article.image || article.urlToImage}" alt="${article.title}">
-                        <a href="${article.url}" target="_blank">Read more</a>
-                    `;
-                    newsContainer.appendChild(newsItem);
-                });
-            } catch (error) {
-                newsContainer.innerHTML = `<p>Error loading news: ${error.message}</p>`;
-                console.error('Error fetching news:', error);
-            }
-            return;
-        } else if (category === 'india-news') {
-            url = `${WORLD_NEWS_API_BASE_URL}search-news?api-key=${worldNewsApiKey}&text=India&source-countries=IN`;
-        } else if (category === 'world-news') {
-            url = `${WORLD_NEWS_API_BASE_URL}search-news?api-key=${worldNewsApiKey}&language=en`;
+            urls = [
+                `${NEWSDATA_API_BASE_URL}${newsDataApiKey}&q=${query}`,
+                `${CURRENT_API_BASE_URL}search?apiKey=${currentsApiKey}&keywords=${query}`,
+                `${WORLD_NEWS_API_BASE_URL}search-news?api-key=${worldNewsApiKey}&text=${query}`
+            ];
         } else {
-            url = `${CURRENT_API_BASE_URL}latest-news?apiKey=${apiKey}&category=${category}`;
+            switch (category) {
+                case 'entertainment-india':
+                    urls = [
+                        `${NEWSDATA_API_BASE_URL}${newsDataApiKey}&category=entertainment`,
+                        `${CURRENT_API_BASE_URL}search?apiKey=${currentsApiKey}&keywords=Bollywood`,
+                        `${WORLD_NEWS_API_BASE_URL}search-news?api-key=${worldNewsApiKey}&text=Bollywood`
+                    ];
+                    break;
+                case 'entertainment':
+                    urls = [
+                        `${NEWSDATA_API_BASE_URL}${newsDataApiKey}&category=entertainment`,
+                        `${CURRENT_API_BASE_URL}search?apiKey=${currentsApiKey}&keywords=entertainment`,
+                        `${WORLD_NEWS_API_BASE_URL}search-news?api-key=${worldNewsApiKey}&language=en`
+                    ];
+                    break;
+                case 'business':
+                    urls = [
+                        `${NEWSDATA_API_BASE_URL}${newsDataApiKey}&category=business`,
+                        `${CURRENT_API_BASE_URL}latest-news?apiKey=${currentsApiKey}&category=business`,
+                        `${WORLD_NEWS_API_BASE_URL}search-news?api-key=${worldNewsApiKey}&text=business`
+                    ];
+                    break;
+                case 'crime':
+                    urls = [
+                        `${NEWSDATA_API_BASE_URL}${newsDataApiKey}&category=crime`,
+                        `${CURRENT_API_BASE_URL}latest-news?apiKey=${currentsApiKey}&category=crime`,
+                        `${WORLD_NEWS_API_BASE_URL}search-news?api-key=${worldNewsApiKey}&text=crime`
+                    ];
+                    break;
+                case 'domestic':
+                    urls = [
+                        `${NEWSDATA_API_BASE_URL}${newsDataApiKey}&category=domestic`,
+                        `${CURRENT_API_BASE_URL}latest-news?apiKey=${currentsApiKey}&category=domestic`,
+                        `${WORLD_NEWS_API_BASE_URL}search-news?api-key=${worldNewsApiKey}&text=domestic`
+                    ];
+                    break;
+                case 'education':
+                    urls = [
+                        `${NEWSDATA_API_BASE_URL}${newsDataApiKey}&category=education`,
+                        `${CURRENT_API_BASE_URL}latest-news?apiKey=${currentsApiKey}&category=education`,
+                        `${WORLD_NEWS_API_BASE_URL}search-news?api-key=${worldNewsApiKey}&text=education`
+                    ];
+                    break;
+                case 'lifestyle':
+                    urls = [
+                        `${NEWSDATA_API_BASE_URL}${newsDataApiKey}&category=lifestyle`,
+                        `${CURRENT_API_BASE_URL}latest-news?apiKey=${currentsApiKey}&category=lifestyle`,
+                        `${WORLD_NEWS_API_BASE_URL}search-news?api-key=${worldNewsApiKey}&text=lifestyle`
+                    ];
+                    break;
+                case 'india-news':
+                    urls = [
+                        `${NEWSDATA_API_BASE_URL}${newsDataApiKey}&category=india-news`,
+                        `${WORLD_NEWS_API_BASE_URL}search-news?api-key=${worldNewsApiKey}&text=India&source-countries=IN`,
+                        `${CURRENT_API_BASE_URL}latest-news?apiKey=${currentsApiKey}&keywords=India`
+                    ];
+                    break;
+                case 'world-news':
+                    urls = [
+                        `${NEWSDATA_API_BASE_URL}${newsDataApiKey}&category=world`,
+                        `${WORLD_NEWS_API_BASE_URL}search-news?api-key=${worldNewsApiKey}&language=en`,
+                        `${CURRENT_API_BASE_URL}latest-news?apiKey=${currentsApiKey}&category=world`
+                    ];
+                    break;
+                default:
+                    urls = [
+                        `${NEWSDATA_API_BASE_URL}${newsDataApiKey}&category=${category}`,
+                        `${CURRENT_API_BASE_URL}latest-news?apiKey=${currentsApiKey}&category=${category}`,
+                        `${WORLD_NEWS_API_BASE_URL}search-news?api-key=${worldNewsApiKey}&text=${category}`
+                    ];
+            }
         }
 
         try {
-            const response = await fetch(url, { method: 'GET', mode: 'cors' });
-            if (response.status === 429) {
-                throw new Error('Too many requests. Please try again later.');
-            }
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const data = await response.json();
+            const responses = await Promise.all(
+                urls.map(url =>
+                    fetch(url, { method: 'GET', mode: 'cors' })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .catch(error => {
+                            console.error('Error fetching news:', error);
+                            return null;
+                        })
+                )
+            );
+
+            const articles = responses
+                .filter(response => response && (response.news || response.articles || response.results))
+                .flatMap(response => response.news || response.articles || response.results);
+
             newsContainer.innerHTML = '';
-            const articles = data.news || data.articles;
-            if (!articles) {
-                throw new Error('Invalid data format');
+            if (articles.length === 0) {
+                newsContainer.innerHTML = '<p>No news available.</p>';
+                return;
             }
+
             articles.forEach(article => {
                 const newsItem = document.createElement('div');
                 newsItem.className = 'news-item';
                 newsItem.innerHTML = `
                     <h3>${article.title}</h3>
                     <p>${article.description}</p>
-                    <p>Author: ${article.author || 'Unknown'}</p> <!-- Added Author -->
-                    <img src="${article.image || article.urlToImage}" alt="${article.title}">
-                    <a href="${article.url}" target="_blank">Read more</a>
+                    <p>Author: ${article.author || article.source_id || 'Unknown'}</p>
+                    <img src="${article.image || article.image_url || article.urlToImage || ''}" alt="${article.title}">
+                    <a href="${article.url || article.link}" target="_blank">Read more</a>
                 `;
                 newsContainer.appendChild(newsItem);
             });
@@ -101,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Search functionality
     searchInput.addEventListener('input', () => {
-        fetchNews('general', searchInput.value);
+        fetchNews('', searchInput.value);
     });
 
     // Toggle sidebar visibility when the hamburger button is clicked
